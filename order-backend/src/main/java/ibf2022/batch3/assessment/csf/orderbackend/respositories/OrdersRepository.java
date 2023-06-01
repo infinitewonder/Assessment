@@ -5,12 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import ibf2022.batch3.assessment.csf.orderbackend.models.PizzaOrder;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
+
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 
 @Repository
@@ -58,9 +65,12 @@ public class OrdersRepository {
     // WARNING: Do not change the method's signature.
     // Write the native MongoDB query in the comment below
     // Native MongoDB query here for markOrderDelivered()
+    // db.orders.updateOne({_id: <orderId>}, { $set: { delivered: true } })
     public boolean markOrderDelivered(String orderId) {
-
-        return false;
+        Query query = new Query(Criteria.where("_id").is(new ObjectId(orderId)));
+        Update update = new Update().set("delivered", true);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, PizzaOrder.class);
+        return result.getModifiedCount() > 0;
     }
 
 }

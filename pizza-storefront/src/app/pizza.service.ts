@@ -27,5 +27,7 @@ export class PizzaService {
   // TODO: Task 7
   // You may add any parameters and return any type from delivered() method
   // Do not change the method name
-  delivered() {}
+  delivered(orderId: string): Observable<any> {
+    return this.http.delete<any>(`${this.orderUrl}/${orderId}`);
+  }
 }
