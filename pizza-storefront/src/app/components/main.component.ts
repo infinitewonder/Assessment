@@ -51,7 +51,7 @@ export class MainComponent {
       email: orderData.email,
       size: parseInt(orderData.pizzaSize),
       sauce: orderData.sauce,
-      thickCrust: orderData.base === 'thick',
+      crust: orderData.base,
       toppings: orderData.toppings
         .split(',')
         .map((item: string) => item.trim()),
