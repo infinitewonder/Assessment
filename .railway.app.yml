@@ -1,0 +1,5 @@
+services:
+  - name: pizza
+    type: java19
+    buildCommand: cd order-backend && mvn clean install
+    runCommand: cd pizza-storefront && java -jar target/order-backend-0.0.1-SNAPSHOT.jar
