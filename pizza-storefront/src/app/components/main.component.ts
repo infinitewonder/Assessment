@@ -52,9 +52,7 @@ export class MainComponent {
       size: parseInt(orderData.pizzaSize),
       sauce: orderData.sauce,
       crust: orderData.base,
-      toppings: orderData.toppings
-        .split(',')
-        .map((item: string) => item.trim()),
+      toppings: orderData.toppings,
       comments: orderData.comments === '' ? null : orderData.comments,
     };
     return pizzaOrder;
