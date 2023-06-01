@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { Router } from '@angular/router';
+import { PizzaService } from '../pizza.service';
+
 const SIZES: string[] = [
   'Personal - 6 inches',
   'Regular - 9 inches',
@@ -36,14 +39,36 @@ export class MainComponent {
     comments: new FormControl(''),
   });
 
-  constructor() {}
+  constructor(private pizzaService: PizzaService, private router: Router) {}
 
   updateSize(size: string) {
     this.pizzaSize = SIZES[parseInt(size)];
   }
 
+  private createPizzaOrder(orderData: any): any {
+    const pizzaOrder: any = {
+      name: orderData.name,
+      email: orderData.email,
+      size: parseInt(orderData.pizzaSize),
+      sauce: orderData.sauce,
+      thickCrust: orderData.base === 'thick',
+      toppings: orderData.toppings
+        .split(',')
+        .map((item: string) => item.trim()),
+      comments: orderData.comments === '' ? null : orderData.comments,
+    };
+    return pizzaOrder;
+  }
+
   onSubmit() {
-    console.log(this.orderForm.value);
-    // Call the order API endpoint/service here with this.orderForm.value as the payload
+    const pizzaOrder = this.createPizzaOrder(this.orderForm.value);
+    this.pizzaService.placeOrder(pizzaOrder).subscribe(
+      (response: any) => {
+        this.router.navigate(['/orders', response.email]);
+      },
+      (error: any) => {
+        alert(error.error.error);
+      }
+    );
   }
 }

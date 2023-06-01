@@ -8,6 +8,8 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { HttpClientModule } from '@angular/common/http';
+
 const appRoutes: Routes = [
   { path: '', component: MainComponent },
   { path: 'orders/:email', component: OrdersComponent },
@@ -21,6 +23,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
