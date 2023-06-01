@@ -1,2 +1,19 @@
-<h2>Orders</h2>
-<p>Order details will be displayed here.</p>
+<div class="pending-orders-container">
+  <h3>Pending Orders for {{ email }}</h3>
+  <ng-container *ngIf="pendingOrders; else noPendingOrders">
+    <div class="orders-list">
+      <div *ngFor="let order of pendingOrders" class="order-item">
+        <div class="order-info">
+          <span>ID: {{ order.orderId }}</span>
+          <span>Date: {{ order.date | date }}</span>
+          <span>Total: {{ order.total | currency }}</span>
+        </div>
+        <button class="delivered-btn">Delivered</button>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noPendingOrders>
+    <p>No pending orders found.</p>
+  </ng-template>
+  <button class="back-btn" (click)="goBack()">Back</button>
+</div>

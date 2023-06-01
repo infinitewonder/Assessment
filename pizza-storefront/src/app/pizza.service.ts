@@ -20,7 +20,9 @@ export class PizzaService {
   // TODO: Task 5
   // You may add any parameters and return any type from getOrders() method
   // Do not change the method name
-  getOrders() {}
+  getOrders(email: string): Observable<any> {
+    return this.http.get<any>(`${this.orderUrl}/${email}`);
+  }
 
   // TODO: Task 7
   // You may add any parameters and return any type from delivered() method

@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import ibf2022.batch3.assessment.csf.orderbackend.models.PizzaOrder;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+import java.util.ArrayList;
+
 @Repository
 public class OrdersRepository {
 
@@ -27,8 +32,26 @@ public class OrdersRepository {
     // Write the native MongoDB query in the comment below
     // Native MongoDB query here for getPendingOrdersByEmail()
     public List<PizzaOrder> getPendingOrdersByEmail(String email) {
+        MongoCollection<Document> collection = mongoTemplate.getCollection("orders");
 
-        return null;
+        // Native MongoDB query:
+        // db.orders.find({email: <email>, delivered: {$ne: true}}, {_id: 0, orderId: 1,
+        // total: 1, date: 1}).sort({date: -1})
+
+        List<Document> results = collection.find(Filters.and(Filters.eq("email", email), Filters.ne("delivered", true)))
+                .projection(new Document("_id", 0).append("orderId", 1).append("total", 1).append("date", 1))
+                .sort(new Document("date", -1))
+                .into(new ArrayList<>());
+
+        List<PizzaOrder> orders = new ArrayList<>();
+        for (Document doc : results) {
+            PizzaOrder order = new PizzaOrder();
+            order.setOrderId(doc.getString("orderId"));
+            order.setDate(doc.getDate("date"));
+            order.setTotal(Float.valueOf(doc.getDouble("total").toString()));
+            orders.add(order);
+        }
+        return orders;
     }
 
     // TODO: Task 7
